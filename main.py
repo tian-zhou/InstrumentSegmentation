@@ -31,9 +31,9 @@ class Codebook:
     """
     def ReadImage(self, fileIndex = 1, show = False):
         # read in image
-        colorFileName = 'training\\color_'+str(fileIndex)+'.jpg'
-        depthFileName = 'training\\depth_'+str(fileIndex)+'.jpg'
-        maskFileName = 'training\\mask_'+str(fileIndex)+'.jpg'
+        colorFileName = 'trainImage\\color_'+str(fileIndex)+'.jpg'
+        depthFileName = 'trainImage\\depth_'+str(fileIndex)+'.jpg'
+        maskFileName = 'trainImage\\mask_'+str(fileIndex)+'.jpg'
         imgBGR = cv2.imread(colorFileName, 1)
         imgGray = cv2.cvtColor(imgBGR, cv2.COLOR_BGR2GRAY)
         imgDepth = cv2.imread(depthFileName, 0)
@@ -371,11 +371,11 @@ class Codebook:
         if fg == True:
             N = min(_N, 535) # in total we have 535 fg images
             for i in range(N):
-                ColorPatches.append(cv2.imread(".\\Patches\\foreground\\fg_"+str(i) + ".jpg", 1))
+                ColorPatches.append(cv2.imread(".\\trainPatches\\foreground\\fg_"+str(i) + ".jpg", 1))
         elif fg == False:
             N = min(_N, 1131) # in total we have 1131 bg images
             for i in range(N):
-                ColorPatches.append(cv2.imread(".\\Patches\\background\\bg_"+str(i) + ".jpg", 1))
+                ColorPatches.append(cv2.imread(".\\trainPatches\\background\\bg_"+str(i) + ".jpg", 1))
         return ColorPatches
 
 
@@ -542,13 +542,13 @@ class Codebook:
             fgMask = self.HarrisCorner(imgBGR, imgGrayHistEqu, imgMask, large = True, tau = 1e-2)
             fgColorPatches = self.ExtractPatches(imgBGR, fgMask)
             for i in range(len(fgColorPatches)):
-                cv2.imwrite(".\\Patches\\foreground\\fg_"+str(i+GLOBAL_numfg) + ".jpg", fgColorPatches[i])
+                cv2.imwrite(".\\trainPatches\\foreground\\fg_"+str(i+GLOBAL_numfg) + ".jpg", fgColorPatches[i])
             GLOBAL_numfg = len(fgColorPatches)
 
             bgMask = self.HarrisCorner(imgBGR, imgGrayHistEqu, imgMask, large = False, tau = 1e-6)
             bgColorPatches = self.ExtractPatches(imgBGR, bgMask)
             for i in range(len(bgColorPatches)):
-                cv2.imwrite(".\\Patches\\background\\bg_"+str(i+GLOBAL_numbg) + ".jpg", bgColorPatches[i])
+                cv2.imwrite(".\\trainPatches\\background\\bg_"+str(i+GLOBAL_numbg) + ".jpg", bgColorPatches[i])
             GLOBAL_numbg = len(bgColorPatches)
 
     """
@@ -829,7 +829,7 @@ def main():
         use contour manipulation to clean the fg mask
         """
         cleanMask = cb.ContourClean(combMaskBig)
-        cv2.imwrite('./intermediate/mask_'+str(fileIndex)+'.jpg', cleanMask)
+        cv2.imwrite('.\\resultMask\\mask_'+str(fileIndex)+'.jpg', cleanMask)
         WaitKey(0)
 
         """

@@ -50,7 +50,6 @@ def HistAnalysis(imgGray, imgMask = None):
         plt.plot(hist_mask)
         plt.xlim([0,256])
 
-
 def main():
     GradientAnalysis(imgGray)
     HistAnalysis(imgGray)
